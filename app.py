@@ -38,4 +38,7 @@ rating_votes_df = user_rating_df.apply(lambda row: row["votes"]).to_frame()
 rating_votes_df.columns = ["votes"]
 
 aggregate_rating_df = user_rating_df.apply(lambda row: float(row["aggregate_rating"])).to_frame()
-print(aggregate_rating_df.dtypes)
+aggregate_rating_df.columns = ["aggregate_rating"]
+
+cuisines_df = df["cuisines"].to_frame()
+cuisines_df.columns = ["cuisines"]
