@@ -19,10 +19,10 @@ for row in data:
         row_count += 1
 
 country_id = df['location']
-print(country_id.loc[0]['address'])
 country_id = country_id.apply(lambda row: row["country_id"])
 country_id = country_id.to_frame()
 country_id.columns = ['country_id']
-
 country = pd.merge(countrydf, country_id, on = "country_id")
-print(country)
+
+restaurant_id = df["id"].to_frame()
+restaurant_id.columns = ["id"]
