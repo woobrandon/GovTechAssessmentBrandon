@@ -32,3 +32,7 @@ country = pd.merge(countrydf, country_id_df, on = "country_id")
 
 city_df = locations_df.apply(lambda row: row['city']).to_frame()
 city_df.columns = ["city"]
+
+rating_votes_df = df['user_rating'].apply(lambda row: row["votes"]).to_frame()
+rating_votes_df.columns = ["votes"]
+print(rating_votes_df)
