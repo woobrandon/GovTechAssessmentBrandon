@@ -42,4 +42,5 @@ aggregate_rating_df.columns = ["aggregate_rating"]
 cuisines_df = df["cuisines"].to_frame()
 cuisines_df.columns = ["cuisines"]
 
+restuarants = pd.concat([restaurant_id_df, restaurant_name_df, country_df, city_df, rating_votes_df, aggregate_rating_df, cuisines_df], axis = 1)
 
