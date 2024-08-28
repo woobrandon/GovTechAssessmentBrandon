@@ -29,3 +29,6 @@ country_id_df = locations_df.apply(lambda row: row["country_id"])
 country_id_df = country_id_df.to_frame()
 country_id_df.columns = ['country_id']
 country = pd.merge(countrydf, country_id_df, on = "country_id")
+
+city_df = locations_df.apply(lambda row: row['city']).to_frame()
+city_df.columns = ["city"]
