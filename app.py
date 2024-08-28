@@ -18,14 +18,14 @@ for row in data:
         df.loc[row_count] = restaurant['restaurant']
         row_count += 1
 
-restaurant_id = df["id"].to_frame()
-restaurant_id.columns = ["id"]
+restaurant_id_df = df["id"].to_frame()
+restaurant_id_df.columns = ["id"]
 
-restaurant_name = df["name"].to_frame()
-restaurant_name.columns = ['name']
+restaurant_name_df = df["name"].to_frame()
+restaurant_name_df.columns = ['name']
 
-country_id = df['location']
-country_id = country_id.apply(lambda row: row["country_id"])
-country_id = country_id.to_frame()
-country_id.columns = ['country_id']
-country = pd.merge(countrydf, country_id, on = "country_id")
+locations_df = df['location']
+country_id_df = locations_df.apply(lambda row: row["country_id"])
+country_id_df = country_id_df.to_frame()
+country_id_df.columns = ['country_id']
+country = pd.merge(countrydf, country_id_df, on = "country_id")
