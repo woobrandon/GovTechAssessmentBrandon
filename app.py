@@ -80,3 +80,7 @@ start_date_df.columns = ["start_date"]
 
 end_date_df = df2['zomato_events'].apply(lambda row: row[0]['event']['end_date']).to_frame()
 end_date_df.columns = ["end_date"]
+
+restuarant_event_df = pd.concat([event_id_df, restaurant_id_df2, restaurant_name_df2, photo_url_df, event_title_df, start_date_df,end_date_df], axis = 1)
+
+restuarant_event_df.to_csv("restaurants_events.csv", index = False)
