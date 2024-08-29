@@ -89,4 +89,22 @@ rating_text_df = df['user_rating'].apply(lambda row: row["rating_text"])
 user_votes_ratings_df = pd.concat([aggregate_rating_df,rating_text_df], axis = 1)
 
 excellent_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Excellent"]
-print(excellent_df)
+excellent_threshold = [min(excellent_df["aggregate_rating"]),max(excellent_df["aggregate_rating"])]
+print(excellent_threshold)
+
+very_good_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Very Good"]
+very_good_threshold = [min(very_good_df["aggregate_rating"]),max(very_good_df["aggregate_rating"])]
+print(very_good_threshold)
+
+good_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Good"]
+good__threhold = [min(good_df["aggregate_rating"]),max(good_df["aggregate_rating"])]
+print(good__threhold)
+
+average_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Average"]
+average_threshold = [min(average_df["aggregate_rating"]),max(average_df["aggregate_rating"])]
+print(average_threshold)
+
+poor_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Poor"]
+poor_threshold = [min(poor_df["aggregate_rating"]),max(poor_df["aggregate_rating"])]
+print(poor_threshold)
+
