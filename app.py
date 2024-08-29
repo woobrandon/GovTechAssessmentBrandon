@@ -58,9 +58,25 @@ def filter_event(row):
         end_date = datetime.strptime(end_date, "%Y-%m")
         if start_date <= target and end_date >= target:
             return True
+    return False
 
-print()
-event_filtered_df = df.apply(lambda row: row if filter_event(row) else None, axis = 1)
-print(event_filtered_df.loc[29])
-print(datetime.strptime(df.loc[29]["zomato_events"][0]["event"]["start_date"][:7], "%Y-%m") <= datetime.strptime("2019-04", "%Y-%m"))
-print(df.loc[29]["zomato_events"])
+filter_df = df.apply(lambda row: True if filter_event(row) else False, axis = 1)
+df2 = df[filter_df].reset_index(drop = True)
+event_id_df = df2["zomato_events"].apply(lambda row: row[0]['event']["event_id"]).to_frame()
+event_id_df.columns = ['event_id']
+
+restaurant_id_df2 = restaurant_id_df[filter_df].reset_index(drop = True)
+
+restaurant_name_df2 = restaurant_name_df[filter_df].reset_index(drop = True)
+
+photo_url_df = df2['zomato_events'].apply(lambda row: row[0]['event']['photos'][0]['photo']['url'] if len(row[0]['event']['photos']) != 0 else "NA")
+photo_url_df.columns = ["photo_url"]
+
+event_title_df = df2['zomato_events'].apply(lambda row: row[0]['event']['title']).to_frame()
+event_title_df.columns = ['event_title']
+
+start_date_df = df2['zomato_events'].apply(lambda row: row[0]['event']['start_date']).to_frame()
+start_date_df.columns = ["start_date"]
+
+end_date_df = df2['zomato_events'].apply(lambda row: row[0]['event']['end_date']).to_frame()
+end_date_df.columns = ["end_date"]
