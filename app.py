@@ -17,11 +17,15 @@ for row in data:
         df.loc[row_count] = restaurant['restaurant']
         row_count += 1
 
-restaurant_id_df = df["id"].to_frame()
-restaurant_id_df.columns = ["restaurant_id"]
+def get_column(column):
+    column_df = df[column].to_frame()
+    column_df.columns = [column]
+    return column_df
 
-restaurant_name_df = df["name"].to_frame()
-restaurant_name_df.columns = ['name']
+restaurant_id_df = get_column("id")
+print(restaurant_id_df)
+
+restaurant_name_df = get_column("name")
 
 locations_df = df['location']
 country_id_df = locations_df.apply(lambda row: row["country_id"]).to_frame()
@@ -44,6 +48,8 @@ cuisines_df.columns = ["cuisines"]
 restaurants = pd.concat([restaurant_id_df, restaurant_name_df, country_df, city_df, rating_votes_df, aggregate_rating_df, cuisines_df], axis = 1)
 
 restaurants.to_csv("restaurants.csv", index = False)
+
+
 
 def filter_event(row):
     zomato_event = row["zomato_events"]
