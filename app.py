@@ -60,24 +60,27 @@ def filter_event(row):
 
 filter_df = df.apply(lambda row: True if filter_event(row) else False, axis = 1)
 df2 = df[filter_df].reset_index(drop = True)
-event_id_df = df2["zomato_events"].apply(lambda row: row[0]['event']["event_id"]).to_frame()
-event_id_df.columns = ['event_id']
+zomato_events_df = df2["zomato_events"]
 
 restaurant_id_df2 = restaurant_id_df[filter_df].reset_index(drop = True)
 
 restaurant_name_df2 = restaurant_name_df[filter_df].reset_index(drop = True)
 
-photo_url_df = df2['zomato_events'].apply(lambda row: row[0]['event']['photos'][0]['photo']['url'] if len(row[0]['event']['photos']) != 0 else "NA").to_frame()
+photo_url_df = zomato_events_df.apply(lambda row: row[0]['event']['photos'][0]['photo']['url'] if len(row[0]['event']['photos']) != 0 else "NA").to_frame()
 photo_url_df.columns = ["photo_url"]
 
-event_title_df = df2['zomato_events'].apply(lambda row: row[0]['event']['title']).to_frame()
-event_title_df.columns = ['event_title']
+def zomato_events_filter(column):
+    column_df = zomato_events_df.apply(lambda row: row[0]['event'][column]).to_frame()
+    column_df.columns = [column]
+    return column_df
 
-start_date_df = df2['zomato_events'].apply(lambda row: row[0]['event']['start_date']).to_frame()
-start_date_df.columns = ["start_date"]
+event_id_df = zomato_events_filter("event_id")
 
-end_date_df = df2['zomato_events'].apply(lambda row: row[0]['event']['end_date']).to_frame()
-end_date_df.columns = ["end_date"]
+event_title_df = zomato_events_filter("title")
+
+start_date_df = zomato_events_filter("start_date")
+
+end_date_df = zomato_events_filter("end_date")
 
 restuarant_event_df = pd.concat([event_id_df, restaurant_id_df2, restaurant_name_df2, photo_url_df, event_title_df, start_date_df,end_date_df], axis = 1)
 
