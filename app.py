@@ -9,7 +9,6 @@ country_code_df.columns = ["country_id", "country"]
 response = requests.get(restauranturl)
 data = response.json()
 
-
 column_names = list(data[0]["restaurants"][0]['restaurant'].keys())
 df = pd.DataFrame(columns=column_names)
 row_count = 0
@@ -23,7 +22,6 @@ restaurant_id_df.columns = ["restaurant_id"]
 
 restaurant_name_df = df["name"].to_frame()
 restaurant_name_df.columns = ['name']
-temp = restaurant_name_df[restaurant_name_df['name'] == "Chili's Grill & Bar"]
 
 locations_df = df['location']
 country_id_df = locations_df.apply(lambda row: row["country_id"]).to_frame()
@@ -45,7 +43,7 @@ cuisines_df.columns = ["cuisines"]
 
 restaurants = pd.concat([restaurant_id_df, restaurant_name_df, country_df, city_df, rating_votes_df, aggregate_rating_df, cuisines_df], axis = 1)
 
-# restaurants.to_csv("restaurants.csv", index = False)
+restaurants.to_csv("restaurants.csv", index = False)
 
 def filter_event(row):
     zomato_event = row["zomato_events"]
@@ -69,7 +67,7 @@ restaurant_id_df2 = restaurant_id_df[filter_df].reset_index(drop = True)
 
 restaurant_name_df2 = restaurant_name_df[filter_df].reset_index(drop = True)
 
-photo_url_df = df2['zomato_events'].apply(lambda row: row[0]['event']['photos'][0]['photo']['url'] if len(row[0]['event']['photos']) != 0 else "NA")
+photo_url_df = df2['zomato_events'].apply(lambda row: row[0]['event']['photos'][0]['photo']['url'] if len(row[0]['event']['photos']) != 0 else "NA").to_frame()
 photo_url_df.columns = ["photo_url"]
 
 event_title_df = df2['zomato_events'].apply(lambda row: row[0]['event']['title']).to_frame()
@@ -83,28 +81,24 @@ end_date_df.columns = ["end_date"]
 
 restuarant_event_df = pd.concat([event_id_df, restaurant_id_df2, restaurant_name_df2, photo_url_df, event_title_df, start_date_df,end_date_df], axis = 1)
 
-# restuarant_event_df.to_csv("restaurants_events.csv", index = False)
+restuarant_event_df.to_csv("restaurants_events.csv", index = False)
 
 rating_text_df = df['user_rating'].apply(lambda row: row["rating_text"])
 user_votes_ratings_df = pd.concat([aggregate_rating_df,rating_text_df], axis = 1)
 
-excellent_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Excellent"]
-excellent_threshold = [min(excellent_df["aggregate_rating"]),max(excellent_df["aggregate_rating"])]
-print(excellent_threshold)
+def threshold_filter(rating):
+    rating_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == rating]
+    threshold_df = [min(rating_df["aggregate_rating"]),max(rating_df["aggregate_rating"])]
+    print(threshold_df)
+    return(threshold_df)
 
-very_good_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Very Good"]
-very_good_threshold = [min(very_good_df["aggregate_rating"]),max(very_good_df["aggregate_rating"])]
-print(very_good_threshold)
+excellent_threshold = threshold_filter("Excellent")
 
-good_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Good"]
-good__threhold = [min(good_df["aggregate_rating"]),max(good_df["aggregate_rating"])]
-print(good__threhold)
+very_good_threshold = threshold_filter("Very Good")
 
-average_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Average"]
-average_threshold = [min(average_df["aggregate_rating"]),max(average_df["aggregate_rating"])]
-print(average_threshold)
+good__threhold = threshold_filter("Good")
 
-poor_df = user_votes_ratings_df[user_votes_ratings_df["user_rating"] == "Poor"]
-poor_threshold = [min(poor_df["aggregate_rating"]),max(poor_df["aggregate_rating"])]
-print(poor_threshold)
+average_threshold = threshold_filter("Average")
+
+poor_threshold = threshold_filter("Poor")
 
